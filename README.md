@@ -8,7 +8,7 @@
 
 **[安装到 Codex](#codex) · [安装到 Claude Code](#claude-code) · [安装到 Cursor](#cursor)**
 
-[12 个场景模板](docs/prompt-cookbook.md) · [效果对比](#效果对比) · [验证与回归](docs/evaluation.md) · [贡献指南](CONTRIBUTING.md) · [更新记录](CHANGELOG.md)
+[12 个场景模板](docs/prompt-cookbook.md) · [8 个改写对照](docs/before-after.md) · [安装排错](docs/install-troubleshooting.md) · [验证与回归](docs/evaluation.md) · [贡献指南](CONTRIBUTING.md) · [更新记录](CHANGELOG.md)
 
 ## 一行安装
 
@@ -106,7 +106,7 @@ npx --yes skills@1.7.4 add sakura-hly/ali-style --skill ali-style --agent cursor
 
 > 本周先把需求的底层逻辑打透，在目标和交付颗粒度上拉齐认知，明确要做什么、做到什么程度，下周再把共识转成研发动作。
 
-更多示例见 [表达与场景示例](skills/ali-style/references/style-examples.md)。示例中的项目、数字和计划仅用于演示，不代表使用者的经历。
+想看完整的“原文 → 提示词 → 成稿 → 核对点”，请看 [8 个改写对照](docs/before-after.md)，涵盖团队贡献、故障通报、数据复盘和同事反馈。模型按需读取的语感参考见[表达与场景示例](skills/ali-style/references/style-examples.md)。示例中的项目、数字和计划仅用于演示，不代表使用者的经历。
 
 ## 安装管理与常见问题
 
@@ -139,6 +139,8 @@ Claude Code 或 Cursor 用户将 `codex` 换成 `claude-code` 或 `cursor`。如
 | 创建符号链接失败 | 在原安装命令末尾追加 `--copy`，使用文件复制方式 |
 | 客户端未识别技能 | 检查 `--agent` 是否选对；项目内安装还需在对应项目中打开客户端，再创建新对话 |
 
+更详细的诊断命令、安装范围核对和固定提交版本安装方法，见[安装排错指南](docs/install-troubleshooting.md)。
+
 ### 手动获取
 
 ```bash
@@ -164,9 +166,13 @@ git clone https://github.com/sakura-hly/ali-style.git
 | [openai.yaml](skills/ali-style/agents/openai.yaml) | 显示名称、默认提示词、图标引用与调用策略 |
 | [icon.svg](skills/ali-style/assets/icon.svg) | skill 图标 |
 | [场景提示词手册](docs/prompt-cookbook.md) | 12 个可直接复制的场景模板与后续调节指令 |
-| [验证与回归指南](docs/evaluation.md) | 检查方法、评估标准及三个实际演练样例 |
-| [回归案例](evals/cases.json) | 12 个行为案例，覆盖事实、格式与误触发 |
+| [改写对照案例](docs/before-after.md) | 8 个完整示例，展示从原始事实到成稿的变化 |
+| [验证与回归指南](docs/evaluation.md) | 检查方法、评估标准、记录工具及实际演练 |
+| [回归案例](evals/cases.json) | 20 个行为案例，覆盖事实、格式、来源冲突与误触发 |
+| [输出记录工具](scripts/evaluate_responses.py) | 生成待填写记录，检查明确的机械约束，汇总人工复核 |
+| [实际输出报告](docs/sample-report.md) | 三个独立会话的输出、核对结果及未执行案例 |
 | [仓库检查器](scripts/validate_repo.py) | 检查文件、基础元数据、本地引用与案例格式 |
+| [版本发布指南](docs/releasing.md) | 固定提交、安装验证和版本说明的维护流程 |
 
 ## 验证与贡献
 
@@ -178,6 +184,16 @@ python -m unittest discover -s tests -v
 ```
 
 [自动检查工作流](.github/workflows/validate.yml)在提交和 Pull Request 时执行结构检查及检查器测试。它不调用模型；事实准确性、风格和触发行为需按[回归指南](docs/evaluation.md)核对实际输出。
+
+要保存一次实际使用的结果，可以生成记录文件，填入原始输出和人工复核结论，再生成报告：
+
+```bash
+python scripts/evaluate_responses.py template --output evaluation-responses.json
+# 按 docs/evaluation.md 填写 evaluation-responses.json，再运行：
+python scripts/evaluate_responses.py report --responses evaluation-responses.json --output evaluation-report.md
+```
+
+该工具不调用模型。字数上限、指定字符串属于机械检查；事实、语气和触发行为仍需人工核对。未填写的案例会显示 `NOT RUN`，不会被算成通过。完整用法与退出码见[回归指南](docs/evaluation.md#保存输出并生成报告)。
 
 欢迎贡献场景、案例和规则修正。请先阅读 [CONTRIBUTING.md](CONTRIBUTING.md)，反馈问题时使用[问题反馈模板](.github/ISSUE_TEMPLATE/bug_report.md)，提出新场景时使用[场景建议模板](.github/ISSUE_TEMPLATE/scenario_request.md)。
 

@@ -2,3 +2,5 @@ __pycache__/
 *.py[cod]
 .venv/
 .DS_Store
+/evaluation-responses.json
+/evaluation-report.md
