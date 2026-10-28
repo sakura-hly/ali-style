@@ -29,5 +29,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Check skill files, links and evaluation cases
         run: python scripts/validate_repo.py
-      - name: Test the validator with broken fixtures
+      - name: Test validators and evaluation bookkeeping
         run: python -m unittest discover -s tests -v
+      - name: Check saved sample responses without calling a model
+        run: python scripts/evaluate_responses.py report --responses evals/sample-responses.json --output "$RUNNER_TEMP/ali-style-sample-report.md"
