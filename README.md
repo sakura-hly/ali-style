@@ -1,10 +1,14 @@
 # 阿里味 · ali-style
 
+[![Repository checks](https://github.com/sakura-hly/ali-style/actions/workflows/validate.yml/badge.svg)](https://github.com/sakura-hly/ali-style/actions/workflows/validate.yml)
+
 把中文素材改写成有辨识度的互联网大厂职场表达，支持 **清淡、标准、爆炒** 三档浓度，也能把黑话翻译成人话。
 
 适用于日常协作、周报、述职、项目汇报、复盘、OKR、会议发言和向上沟通。“阿里味”指网络语境中的风格创作，不代表阿里巴巴的内部规范或官方背书。
 
 **[安装到 Codex](#codex) · [安装到 Claude Code](#claude-code) · [安装到 Cursor](#cursor)**
+
+[12 个场景模板](docs/prompt-cookbook.md) · [效果对比](#效果对比) · [验证与回归](docs/evaluation.md) · [贡献指南](CONTRIBUTING.md) · [更新记录](CHANGELOG.md)
 
 ## 一行安装
 
@@ -39,6 +43,18 @@ npx --yes skills@1.7.4 add sakura-hly/ali-style --skill ali-style --agent cursor
 ```
 
 > 这些命令将技能安装到本机的 Codex、Claude Code 或 Cursor；ChatGPT 云端 Skills 需要单独安装，不会通过这些命令同步。
+
+## 按场景直接开始
+
+在[场景提示词手册](docs/prompt-cookbook.md)中，复制完整模板、填入素材，即可开始使用。模板会提示你写清时间、数字、当前进度和待确认事项。
+
+| 你想做什么 | 可以直接复制的模板 |
+| --- | --- |
+| 给同事发消息、协调依赖 | [日常协作](docs/prompt-cookbook.md#1-日常协作)、[跨团队对齐](docs/prompt-cookbook.md#4-跨团队对齐) |
+| 汇报进展、展示贡献 | [技术周报](docs/prompt-cookbook.md#2-技术周报)、[向上汇报](docs/prompt-cookbook.md#3-向上汇报)、[述职材料](docs/prompt-cookbook.md#5-述职材料) |
+| 讨论方案、规划目标 | [方案评审](docs/prompt-cookbook.md#6-方案评审)、[OKR 草稿](docs/prompt-cookbook.md#7-okr-草稿) |
+| 解释延期、故障或数据结果 | [延期沟通](docs/prompt-cookbook.md#8-延期沟通)、[故障复盘](docs/prompt-cookbook.md#9-故障复盘)、[数据复盘](docs/prompt-cookbook.md#10-数据复盘) |
+| 看懂黑话、轻松玩梗 | [黑话翻译](docs/prompt-cookbook.md#11-黑话翻译)、[爆炒玩梗](docs/prompt-cookbook.md#12-爆炒玩梗) |
 
 ## 三档浓度
 
@@ -147,6 +163,23 @@ git clone https://github.com/sakura-hly/ali-style.git
 | [style-examples.md](skills/ali-style/references/style-examples.md) | 改写、技术周报、述职、延期、会议、玩梗与翻译示例 |
 | [openai.yaml](skills/ali-style/agents/openai.yaml) | 显示名称、默认提示词、图标引用与调用策略 |
 | [icon.svg](skills/ali-style/assets/icon.svg) | skill 图标 |
+| [场景提示词手册](docs/prompt-cookbook.md) | 12 个可直接复制的场景模板与后续调节指令 |
+| [验证与回归指南](docs/evaluation.md) | 检查方法、评估标准及三个实际演练样例 |
+| [回归案例](evals/cases.json) | 12 个行为案例，覆盖事实、格式与误触发 |
+| [仓库检查器](scripts/validate_repo.py) | 检查文件、基础元数据、本地引用与案例格式 |
+
+## 验证与贡献
+
+维护者可在仓库根目录运行以下命令，需要 Python 3.10 或更新版本，无需额外 Python 依赖：
+
+```bash
+python scripts/validate_repo.py
+python -m unittest discover -s tests -v
+```
+
+[自动检查工作流](.github/workflows/validate.yml)在提交和 Pull Request 时执行结构检查及检查器测试。它不调用模型；事实准确性、风格和触发行为需按[回归指南](docs/evaluation.md)核对实际输出。
+
+欢迎贡献场景、案例和规则修正。请先阅读 [CONTRIBUTING.md](CONTRIBUTING.md)，反馈问题时使用[问题反馈模板](.github/ISSUE_TEMPLATE/bug_report.md)，提出新场景时使用[场景建议模板](.github/ISSUE_TEMPLATE/scenario_request.md)。
 
 ## 表达边界
 
