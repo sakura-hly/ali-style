@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "metadata": {
+    "client": "独立助手会话，每个案例新建会话；显式读取技能文件，未验证客户端自动触发",
+    "model": null,
+    "skill_revision": "44516fa9ce4154a8161ea28b56e1c6285ff8539c",
+    "date": "2026-10-28",
+    "explicit_skill_selection": true
+  },
+  "responses": [
+    {
+      "case_id": "critique-01",
+      "output": "昨天接口字段改了，但没有通知我，导致联调阻塞了半天。希望下次修改前先通知我，提前对齐变更内容，避免再次影响联调。",
+      "manual_review": {
+        "status": "pass",
+        "notes": "维护助手逐项复核：保留昨天、字段变更未通知、联调阻塞半天和下次提前通知的请求；未添加人格评价。原始输出为56个码点，小于90。未执行客户端触发测试。"
+      }
+    },
+    {
+      "case_id": "format-json-01",
+      "output": "{\"status\":\"导入工具开发已完成，联调作为下一阶段的关键节点，尚未启动。\",\"next_step\":\"预计下周推进联调，具体排期尚未明确，时间节点待拉齐。\"}",
+      "manual_review": {
+        "status": "pass",
+        "notes": "维护助手复核并使用 json.loads 解析：仅含 status、next_step 两个字符串字段，无代码围栏；保留开发完成、联调未启动、预计下周但未明确排期。此 JSON 格式检查属于本次复核证据，不是记录工具内置的机械规则。"
+      }
+    },
+    {
+      "case_id": "technical-literals-01",
+      "output": "当前客户端已支持识别HTTP 429，限流处理链路仍有两项关键卡点：尚不支持读取Retry-After，退避策略也尚未落地。目前仅在staging开展过测试。",
+      "manual_review": {
+        "status": "pass",
+        "notes": "维护助手逐项复核：已识别HTTP 429、未读取Retry-After、退避未实现和仅staging测试均保留；未声称生产可用。三个指定字符串原样保留。"
+      }
+    }
+  ]
+}

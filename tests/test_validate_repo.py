@@ -79,6 +79,26 @@ class RepositoryValidationTests(unittest.TestCase):
         self.assertIn("should_trigger must be a JSON boolean", errors)
         self.assertIn("checks must be a non-empty array", errors)
 
+    def test_valid_optional_machine_checks(self) -> None:
+        self.cases["cases"][0]["machine_checks"] = {"max_chars": 40, "required_literals": ["下周"]}
+        self.save_cases()
+        self.assertEqual(validate_repository(self.root), [])
+
+    def test_invalid_machine_checks_do_not_silently_pass(self) -> None:
+        self.cases["cases"][0]["machine_checks"] = {"max_chars": True, "required_literals": [""], "max_char": 40}
+        self.save_cases()
+        errors = self.errors()
+        self.assertIn("max_chars must be a positive integer", errors)
+        self.assertIn("required_literals must be a non-empty array", errors)
+        self.assertIn("unknown machine_checks: max_char", errors)
+
+    def test_empty_or_wrong_machine_check_container_is_rejected(self) -> None:
+        for rules in ({}, [], None):
+            with self.subTest(rules=rules):
+                self.cases["cases"][0]["machine_checks"] = rules
+                self.save_cases()
+                self.assertIn("machine_checks must be a non-empty object", self.errors())
+
 
 if __name__ == "__main__":
     unittest.main()
