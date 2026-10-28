@@ -1,0 +1,13 @@
+interface:
+  display_name: 阿里味
+  short_description: 把日常表达改写成阿里味职场文案，支持周报述职、三档浓度和黑话翻译
+  default_prompt: 请用 $ali-style 把下面的内容改写成标准浓度的阿里味，保留事实和进度：
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true
