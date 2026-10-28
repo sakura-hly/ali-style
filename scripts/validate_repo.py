@@ -187,6 +187,20 @@ def check_cases(text: str, errors: list[str]) -> None:
         checks = case.get("checks")
         if not isinstance(checks, list) or not checks or any(not isinstance(item, str) or not item.strip() for item in checks):
             errors.append(f"{location}: checks must be a non-empty array of non-empty strings")
+        if "machine_checks" in case:
+            rules = case["machine_checks"]
+            if not isinstance(rules, dict) or not rules:
+                errors.append(f"{location}: machine_checks must be a non-empty object")
+                continue
+            unknown = set(rules) - {"max_chars", "required_literals"}
+            if unknown:
+                errors.append(f"{location}: unknown machine_checks: {', '.join(sorted(unknown))}")
+            if "max_chars" in rules and (type(rules["max_chars"]) is not int or rules["max_chars"] <= 0):
+                errors.append(f"{location}: max_chars must be a positive integer")
+            if "required_literals" in rules:
+                literals = rules["required_literals"]
+                if not isinstance(literals, list) or not literals or any(not isinstance(item, str) or not item.strip() for item in literals):
+                    errors.append(f"{location}: required_literals must be a non-empty array of non-empty strings")
 
 
 def validate_repository(root: Path) -> list[str]:
